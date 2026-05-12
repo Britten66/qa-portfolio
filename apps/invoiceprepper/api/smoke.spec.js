@@ -4,7 +4,7 @@ import { test, expect } from "@playwright/test";
 // a 500 here means the function is broken, not just locked down
 // 401 is the right answer for no auth, that's what we want to see
 
-const BASE = `${process.env.SUPABASE_URL}/functions/v1`;
+const BASE = "https://qajcynqmjtlzofoyklyp.supabase.co/functions/v1";
 
 // OPTIONS has to work or the browser blocks every request before it even tries
 async function expectCors(request, path) {

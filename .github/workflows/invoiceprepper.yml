@@ -34,7 +34,6 @@ jobs:
         env:
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
 
       - name: Upload login failure screenshot
         if: failure()
