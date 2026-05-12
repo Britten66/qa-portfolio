@@ -55,19 +55,5 @@ qa-portfolio/
 ```bash
 npm install
 npx playwright install chromium
-
-# create .env.test with:
-# TEST_EMAIL=your-test-account@email.com
-# TEST_PASSWORD=yourpassword
-
 npm test
 ```
-
----
-
-## Adding a New App
-
-1. Create `apps/<appname>/e2e/`
-2. Add a new project to `playwright.config.js`
-3. Add a new workflow to `.github/workflows/`
-4. Add a row to the table above
