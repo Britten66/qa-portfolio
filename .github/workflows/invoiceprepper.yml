@@ -35,6 +35,13 @@ jobs:
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
 
+      - name: Upload login failure screenshot
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: login-failure
+          path: login-failure.png
+
       - name: Generate Allure report
         if: always()
         run: npx allure generate --output allure-report allure-results

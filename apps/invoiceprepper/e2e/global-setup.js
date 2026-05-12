@@ -39,7 +39,14 @@ export default async function globalSetup() {
   }
 
   // Confirm dashboard rendered
-  await page.locator(".app-shell").waitFor({ timeout: 30000 });
+  try {
+    await page.locator(".app-shell").waitFor({ timeout: 30000 });
+  } catch {
+    console.log("URL at failure:", page.url());
+    console.log("Page title:", await page.title());
+    await page.screenshot({ path: "login-failure.png", fullPage: true });
+    throw new Error("Dashboard did not appear after login. Screenshot saved as login-failure.png");
+  }
 
   await page.context().storageState({ path: AUTH_FILE });
   await browser.close();
