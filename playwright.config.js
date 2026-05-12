@@ -24,6 +24,10 @@ export default defineConfig({
 
   projects: [
     {
+      name: "invoiceprepper-smoke",
+      testMatch: ["**/invoiceprepper/api/smoke.spec.js"],
+    },
+    {
       name: "invoiceprepper-public",
       testMatch: [
         "**/invoiceprepper/e2e/accessibility.spec.js",
