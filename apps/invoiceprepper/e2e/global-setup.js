@@ -18,26 +18,29 @@ export default async function globalSetup() {
 
   await page.goto("https://invoiceprepper.com");
 
+  // Open sign in modal
   await page.getByRole("button", { name: /^sign in$/i }).click();
-  await page.getByText("Welcome back").waitFor();
+  await page.getByText("Welcome back").waitFor({ timeout: 10000 });
 
-  await page.fill("#auth-email",    email);
+  // Fill and submit
+  await page.fill("#auth-email", email);
   await page.fill("#auth-password", password);
   await page.getByRole("button", { name: /^sign in$/i }).last().click();
 
-  try {
-    const welcome = page.locator(".welcome-modal, [class*='welcome']").first();
-    await welcome.waitFor({ timeout: 5000 });
-    await page.keyboard.press("Escape");
-  } catch {}
+  // Wait for network to settle after Supabase auth
+  await page.waitForLoadState("networkidle", { timeout: 30000 });
 
-  try {
-    const consent = page.locator(".consent-modal, [class*='consent']").first();
-    await consent.waitFor({ timeout: 3000 });
-    await page.keyboard.press("Escape");
-  } catch {}
+  // Dismiss modals if present
+  for (const selector of [".welcome-modal", ".consent-modal", "[class*='welcome']", "[class*='consent']"]) {
+    try {
+      await page.locator(selector).first().waitFor({ timeout: 3000 });
+      await page.keyboard.press("Escape");
+    } catch {}
+  }
 
-  await page.locator(".app-shell, .sidebar").first().waitFor({ timeout: 20000 });
+  // Confirm dashboard rendered
+  await page.locator(".app-shell").waitFor({ timeout: 30000 });
+
   await page.context().storageState({ path: AUTH_FILE });
   await browser.close();
 }
