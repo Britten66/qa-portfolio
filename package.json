@@ -1,0 +1,15 @@
+{
+  "name": "qa-portfolio",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:invoiceprepper": "playwright test --project=invoiceprepper-public --project=invoiceprepper-dashboard",
+    "report": "allure generate allure-results --clean -o allure-report && allure open allure-report"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "^1.52.0",
+    "allure-playwright": "^3.0.0"
+  }
+}
