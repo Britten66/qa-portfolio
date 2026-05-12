@@ -29,9 +29,6 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Verify global-setup file
-        run: cat apps/invoiceprepper/e2e/global-setup.js
-
       - name: Run E2E tests
         run: npm test
         env:
