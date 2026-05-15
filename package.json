@@ -4,8 +4,11 @@
   "type": "module",
   "scripts": {
     "test": "playwright test",
-    "test:invoiceprepper": "playwright test --project=invoiceprepper-public --project=invoiceprepper-dashboard",
-    "report": "allure generate allure-results --clean -o allure-report && allure open allure-report"
+    "test:public": "playwright test --project=invoiceprepper-smoke --project=invoiceprepper-public",
+    "test:dashboard": "playwright test --project=invoiceprepper-dashboard",
+    "anonymize": "node scripts/anonymize-allure-portfolio.cjs",
+    "report": "allure generate allure-results --clean -o allure-report && allure open allure-report",
+    "report:portfolio": "node scripts/anonymize-allure-portfolio.cjs && allure generate allure-results --clean -o allure-report"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",

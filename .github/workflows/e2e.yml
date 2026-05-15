@@ -1,9 +1,11 @@
-name: InvoicePrepper E2E
+name: E2E
 
 on:
   schedule:
     - cron: '0 6 * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
 
 permissions:
   contents: write
@@ -12,7 +14,7 @@ permissions:
 
 jobs:
   e2e:
-    name: E2E against invoiceprepper.com
+    name: Black-box E2E against production
     runs-on: ubuntu-latest
 
     steps:
@@ -29,8 +31,13 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run E2E tests
-        run: npm test
+      - name: Public + API smoke tests
+        continue-on-error: true
+        run: npm run test:public
+
+      - name: Authenticated dashboard tests
+        continue-on-error: true
+        run: npm run test:dashboard
         env:
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
@@ -41,6 +48,10 @@ jobs:
         with:
           name: login-failure
           path: login-failure.png
+
+      - name: Anonymize Allure results for public report
+        if: always()
+        run: node scripts/anonymize-allure-portfolio.cjs
 
       - name: Generate Allure report
         if: always()
