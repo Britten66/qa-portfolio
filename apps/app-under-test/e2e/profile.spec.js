@@ -27,6 +27,12 @@ test.describe("Profile", () => {
     await expect(page.locator(".modal .field").first()).toBeVisible();
   });
 
+  test("profile modal has email field", async ({ page }) => {
+    await page.locator(".sidebar .btn-ghost").first().click();
+    await page.locator(".modal").waitFor();
+    await expect(page.locator(".modal").getByLabel(/email/i)).toBeVisible();
+  });
+
   test("profile modal closes on Escape", async ({ page }) => {
     await page.locator(".sidebar .btn-ghost").first().click();
     await page.locator(".modal").waitFor();

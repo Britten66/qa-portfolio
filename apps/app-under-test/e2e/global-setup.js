@@ -10,7 +10,8 @@ export default async function globalSetup() {
   const password = process.env.TEST_PASSWORD;
 
   if (!email || !password) {
-    throw new Error("TEST_EMAIL and TEST_PASSWORD must be set.");
+    console.log("TEST_EMAIL/TEST_PASSWORD not set — skipping authenticated session setup (public-only run).");
+    return;
   }
 
   const browser = await chromium.launch();
