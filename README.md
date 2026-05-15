@@ -36,32 +36,6 @@ BDD is used only on the record lifecycle feature, where stakeholder readability 
 
 **Project partitioning.** Public, authenticated, API-smoke, and BDD suites are separate Playwright projects. Public regressions are visible independently of auth failures, which matters when third-party auth services flake.
 
-**Anonymized public report.** A post-processing step (`scripts/anonymize-allure-portfolio.cjs`) strips identifiers from `allure-results/*.json` before the Allure CLI generates the public report. The script reads sensitive terms from `ANONYMIZE_TERMS` at runtime so the source never lists what it is hiding.
-
-## Environment
-
-The repo never names the product. Set these locally and as CI secrets:
-
-```
-TARGET_URL          base url for the app under test
-FUNCTIONS_BASE      base url for the backend functions, used by API smoke
-TEST_EMAIL          test account email, dashboard suite only
-TEST_PASSWORD       test account password, dashboard suite only
-ANONYMIZE_TERMS     comma separated list of strings to scrub from the public report
-```
-
-## Run locally
-
-```bash
-npm install
-npx playwright install chromium
-
-npm run test:public          # public + API smoke (no creds)
-npm run test:dashboard       # authenticated suites (needs TEST_EMAIL / TEST_PASSWORD)
-npm run test:bdd             # generate + run Gherkin scenarios
-
-npm run report:portfolio     # anonymize, generate HTML report
-```
 
 ## Repo layout
 
