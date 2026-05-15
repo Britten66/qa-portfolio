@@ -12,15 +12,15 @@ Tests are grouped into 9 epics in the published Allure report:
 
 | Epic | Coverage |
 |------|----------|
-| EP-01 Authentication & Session | Sign in, sign up, password reset, modal keyboard behaviour, session reuse |
-| EP-02 Marketing Funnel & Acquisition | Landing CTAs, navigation, footer integrity |
-| EP-03 SEO Surfaces | Heading hierarchy, canonical links, page metadata |
-| EP-04 Dashboard & Navigation | Sidebar, status filters, empty state |
-| EP-05 Record Lifecycle | New record form open / fill / cancel, status filters, soft-delete UI |
-| EP-06 Subscription Billing | Plan modal, payment redirect, plan-state display |
-| EP-07 Account Settings & Profile | Profile persistence, password update |
-| EP-08 Accessibility Compliance | WCAG 2.1 AA via axe-core on every public and authed route |
-| EP-09 API Health & Contract Smoke | Edge function uptime, CORS preflight, auth boundary |
+| EP01 Authentication & Session | Sign in, sign up, password reset, modal keyboard behaviour, session reuse |
+| EP02 Marketing Funnel & Acquisition | Landing CTAs, navigation, footer integrity |
+| EP03 SEO Surfaces | Heading hierarchy, canonical links, page metadata |
+| EP04 Dashboard & Navigation | Sidebar, status filters, empty state |
+| EP05 Record Lifecycle | New record form open / fill / cancel, status filters, soft-delete UI |
+| EP06 Subscription Billing | Plan modal, payment redirect, plan-state display |
+| EP07 Account Settings & Profile | Profile persistence, password update |
+| EP08 Accessibility Compliance | WCAG 2.1 AA via axe-core on every public and authed route |
+| EP09 API Health & Contract Smoke | Edge function uptime, CORS preflight, auth boundary |
 
 ## Stack
 
@@ -28,13 +28,8 @@ Playwright 1.52, `@axe-core/playwright`, `allure-playwright`, `playwright-bdd` f
 
 BDD is used only on the record lifecycle feature, where stakeholder readability is worth the indirection. Everything else stays as plain Playwright specs.
 
-## Architecture decisions
 
-**Live-target testing.** No staging environment, no test doubles. Production is the test target. Catches CDN, DNS, third-party service, and config-drift regressions that staging suites miss.
-
-**Session reuse.** A single login runs in `global-setup.js`, persists storage state to `apps/<app>/.auth/user.json`, and replays across every authenticated suite. Avoids rate limits and saves ~3s per spec.
-
-**Project partitioning.** Public, authenticated, API-smoke, and BDD suites are separate Playwright projects. Public regressions are visible independently of auth failures, which matters when third-party auth services flake.
+**Behind The Project Idea .** Public, authenticated, API-smoke, and BDD suites are separate Playwright projects. Public regressions are visible independently of auth failures, which matters when third-party auth services flake.
 
 
 ## Repo layout
