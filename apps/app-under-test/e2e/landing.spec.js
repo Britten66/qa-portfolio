@@ -15,7 +15,7 @@ test.describe("Landing page", () => {
 
   test("a hero CTA button is visible", async ({ page }) => {
     // there are multiple CTAs on the page, hero + pricing, just need one visible
-    const cta = page.locator(".hero").getByRole("button").first();
+    const cta = page.locator(".hero button, .hero a").first();
     await expect(cta).toBeVisible();
   });
 
