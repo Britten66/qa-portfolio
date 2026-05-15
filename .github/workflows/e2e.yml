@@ -32,12 +32,16 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Public + API smoke tests
-        continue-on-error: true
         run: npm run test:public
 
       - name: Authenticated dashboard tests
-        continue-on-error: true
         run: npm run test:dashboard
+        env:
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+
+      - name: BDD scenarios (invoice lifecycle)
+        run: npm run test:bdd
         env:
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}

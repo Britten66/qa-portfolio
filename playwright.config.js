@@ -1,5 +1,13 @@
 import { defineConfig, devices } from "@playwright/test";
+import { defineBddConfig } from "playwright-bdd";
 import { AUTH_FILE } from "./apps/invoiceprepper/e2e/global-setup.js";
+
+// bdd generates playwright test files from .feature files into this dir
+// run `npm run bdd:gen` before `npm test` or use `npm run test:bdd`
+const bddTestDir = defineBddConfig({
+  features: "apps/invoiceprepper/features/*.feature",
+  steps: "apps/invoiceprepper/features/steps/*.js",
+});
 
 export default defineConfig({
   testDir: "./apps",
@@ -45,6 +53,15 @@ export default defineConfig({
         "**/invoiceprepper/e2e/billing.spec.js",
         "**/invoiceprepper/e2e/profile.spec.js",
       ],
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: AUTH_FILE,
+      },
+    },
+    {
+      // bdd scenarios, generated from .feature files
+      name: "invoiceprepper-bdd",
+      testDir: bddTestDir,
       use: {
         ...devices["Desktop Chrome"],
         storageState: AUTH_FILE,

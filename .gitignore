@@ -4,4 +4,5 @@ allure-report/
 playwright-report/
 test-results/
 apps/**/.auth/*.json
+.features-gen/
 HANDOFF.md

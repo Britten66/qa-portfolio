@@ -16,7 +16,7 @@ Tests are grouped into 9 epics in the published Allure report:
 | EP-02 Marketing Funnel & Acquisition | Landing CTAs, navigation, mock preview, footer integrity |
 | EP-03 SEO Surfaces & Discoverability | Trade-targeted landing pages, heading hierarchy, canonical links |
 | EP-04 Dashboard & Navigation | Sidebar, status filters, empty state, theme persistence |
-| EP-05 Record Lifecycle (CRUD) | Create, edit, send, PDF download, soft delete, restore |
+| EP-05 Record Lifecycle | New invoice form open / fill / cancel, status filters, soft-delete UI |
 | EP-06 Subscription Billing & Payments | Plan modal, upgrade flow, payment redirect, plan-state display |
 | EP-07 Account Settings & Profile | Profile persistence, password update, avatar / logo flows |
 | EP-08 Accessibility Compliance | WCAG 2.1 AA via axe-core on every public and authed route |
@@ -24,7 +24,9 @@ Tests are grouped into 9 epics in the published Allure report:
 
 ## Stack
 
-Playwright 1.52, `@axe-core/playwright`, `allure-playwright`. Node 24. CI on GitHub Actions (nightly cron, `workflow_dispatch`, push to main). Allure HTML deployed to GitHub Pages on the `gh-pages` branch.
+Playwright 1.52, `@axe-core/playwright`, `allure-playwright`, `playwright-bdd` for the Gherkin scenarios. Node 24. CI on GitHub Actions (nightly cron, `workflow_dispatch`, push to main). Allure HTML deployed to GitHub Pages on the `gh-pages` branch.
+
+BDD is used only on the invoice lifecycle feature, where the readability is worth the indirection. Everything else stays as plain Playwright specs.
 
 ## Architecture decisions
 
@@ -44,6 +46,7 @@ npx playwright install chromium
 
 npm run test:public          # public + API smoke (no creds)
 npm run test:dashboard       # authenticated suites (needs TEST_EMAIL / TEST_PASSWORD)
+npm run test:bdd             # generate + run Gherkin scenarios
 
 npm run report:portfolio     # anonymize, generate HTML report
 ```
@@ -52,9 +55,12 @@ npm run report:portfolio     # anonymize, generate HTML report
 
 ```
 apps/<app>/
-  api/       contract smoke specs
-  e2e/       browser flow specs
-  .auth/     gitignored, session storage
-scripts/     CI tooling (Allure anonymizer)
+  api/                 contract smoke specs
+  e2e/                 browser flow specs
+  e2e/pages/           page objects (AuthModal, Sidebar, InvoiceList)
+  features/            Gherkin .feature files
+  features/steps/      step definitions
+  .auth/               gitignored, session storage
+scripts/               CI tooling (Allure anonymizer)
 .github/workflows/e2e.yml
 ```
