@@ -1,0 +1,178 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: app-under-test/e2e/accessibility.spec.js >> Accessibility: Form labels >> sign in form inputs all have labels
+- Location: apps/app-under-test/e2e/accessibility.spec.js:157:3
+
+# Error details
+
+```
+Error: page.goto: net::ERR_NAME_NOT_RESOLVED at https://app.example.com/
+Call log:
+  - navigating to "https://app.example.com/", waiting until "load"
+
+```
+
+# Test source
+
+```ts
+  59  |     await page.goto("/");
+  60  |     const results = await new AxeBuilder({ page })
+  61  |       .withTags(["wcag2a", "wcag2aa", "best-practice"])
+  62  |       .analyze();
+  63  |     expect(results.violations).toEqual([]);
+  64  |   });
+  65  | 
+  66  |   test("sign in modal has no violations", async ({ page }) => {
+  67  |     await page.emulateMedia({ reducedMotion: "reduce" });
+  68  |     await page.goto("/");
+  69  |     await page.getByRole("button", { name: /^sign in$/i }).click();
+  70  |     await page.getByText("Welcome back").waitFor();
+  71  |     await finishAnimations(page);
+  72  |     const results = await new AxeBuilder({ page })
+  73  |       .withTags(["wcag2a", "wcag2aa", "best-practice"])
+  74  |       .analyze();
+  75  |     expect(results.violations).toEqual([]);
+  76  |   });
+  77  | 
+  78  |   test("sign up modal has no violations", async ({ page }) => {
+  79  |     await page.emulateMedia({ reducedMotion: "reduce" });
+  80  |     await page.goto("/");
+  81  |     await page.getByRole("button", { name: /^sign up$/i }).click();
+  82  |     await page.getByText("Create your account").waitFor();
+  83  |     await finishAnimations(page);
+  84  |     const results = await new AxeBuilder({ page })
+  85  |       .withTags(["wcag2a", "wcag2aa", "best-practice"])
+  86  |       .analyze();
+  87  |     expect(results.violations).toEqual([]);
+  88  |   });
+  89  | });
+  90  | 
+  91  | // ─── LAYOUT STRUCTURE ────────────────────────────────────────────────────────
+  92  | 
+  93  | test.describe("Accessibility: Layout structure", () => {
+  94  |   test.beforeEach(async ({ page }) => {
+  95  |     await page.goto("/");
+  96  |     // Wait for React to render: nav is the first landmark React produces
+  97  |     await page.locator("nav").first().waitFor({ timeout: 15000 });
+  98  |   });
+  99  | 
+  100 |   test("page has exactly one h1", async ({ page }) => {
+  101 |     const h1s = await page.locator("h1").all();
+  102 |     expect(h1s.length).toBe(1);
+  103 |   });
+  104 | 
+  105 |   test("heading hierarchy has no skipped levels", async ({ page }) => {
+  106 |     const levels = await page.evaluate(() =>
+  107 |       Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6")).map((el) =>
+  108 |         parseInt(el.tagName[1])
+  109 |       )
+  110 |     );
+  111 |     for (let i = 1; i < levels.length; i++) {
+  112 |       expect(levels[i] - levels[i - 1]).toBeLessThanOrEqual(1);
+  113 |     }
+  114 |   });
+  115 | 
+  116 |   test("page has a navigation landmark", async ({ page }) => {
+  117 |     await expect(page.locator("nav, [role='navigation']").first()).toBeVisible();
+  118 |   });
+  119 | 
+  120 |   test("page has a main landmark", async ({ page }) => {
+  121 |     const main = page.locator("main, [role='main']").first();
+  122 |     const count = await page.locator("main, [role='main']").count();
+  123 |     expect(count).toBeGreaterThanOrEqual(1);
+  124 |     if (count > 0) await expect(main).toBeAttached();
+  125 |   });
+  126 | 
+  127 |   test("all images have non-empty alt text", async ({ page }) => {
+  128 |     const images = await page.locator("img").all();
+  129 |     for (const img of images) {
+  130 |       const alt = await img.getAttribute("alt");
+  131 |       expect(alt).not.toBeNull();
+  132 |       expect(alt?.trim().length).toBeGreaterThan(0);
+  133 |     }
+  134 |   });
+  135 | 
+  136 |   test("all buttons have an accessible name", async ({ page }) => {
+  137 |     const unnamed = await page.evaluate(() =>
+  138 |       Array.from(document.querySelectorAll("button")).filter(
+  139 |         (el) =>
+  140 |           !(
+  141 |             el.getAttribute("aria-label")?.trim() ||
+  142 |             el.getAttribute("title")?.trim() ||
+  143 |             el.textContent?.trim()
+  144 |           )
+  145 |       ).length
+  146 |     );
+  147 |     expect(unnamed).toBe(0);
+  148 |   });
+  149 | 
+  150 |   test("page title is set and non-empty", async ({ page }) => {
+  151 |     const title = await page.title();
+  152 |     expect(title.trim().length).toBeGreaterThan(0);
+  153 |   });
+  154 | });
+  155 | 
+  156 | test.describe("Accessibility: Form labels", () => {
+  157 |   test("sign in form inputs all have labels", async ({ page }) => {
+  158 |     await page.emulateMedia({ reducedMotion: "reduce" });
+> 159 |     await page.goto("/");
+      |                ^ Error: page.goto: net::ERR_NAME_NOT_RESOLVED at https://app.example.com/
+  160 |     await page.getByRole("button", { name: /^sign in$/i }).click();
+  161 |     await page.getByText("Welcome back").waitFor();
+  162 |     await finishAnimations(page);
+  163 |     const inputs = await page.locator("input:not([type='hidden']):not([aria-hidden='true'])").all();
+  164 |     for (const input of inputs) {
+  165 |       const id = await input.getAttribute("id");
+  166 |       const ariaLabel = await input.getAttribute("aria-label");
+  167 |       const ariaLabelledBy = await input.getAttribute("aria-labelledby");
+  168 |       const hasLabel = id
+  169 |         ? (await page.locator(`label[for="${id}"]`).count()) > 0
+  170 |         : false;
+  171 |       const hasAriaLabel = !!ariaLabel || !!ariaLabelledBy;
+  172 |       const hasPlaceholder = !!(await input.getAttribute("placeholder"));
+  173 |       expect(hasLabel || hasAriaLabel || hasPlaceholder).toBe(true);
+  174 |     }
+  175 |   });
+  176 | });
+  177 | 
+  178 | // ─── KEYBOARD + INTERACTION ───────────────────────────────────────────────────
+  179 | 
+  180 | test.describe("Accessibility: Keyboard interaction", () => {
+  181 |   test("Escape closes the sign in modal", async ({ page }) => {
+  182 |     await page.emulateMedia({ reducedMotion: "reduce" });
+  183 |     await page.goto("/");
+  184 |     await page.getByRole("button", { name: /^sign in$/i }).click();
+  185 |     await page.getByText("Welcome back").waitFor();
+  186 |     await finishAnimations(page);
+  187 |     await page.keyboard.press("Escape");
+  188 |     await expect(page.getByText("Welcome back")).not.toBeVisible();
+  189 |   });
+  190 | 
+  191 |   test("Escape closes the sign up modal", async ({ page }) => {
+  192 |     await page.emulateMedia({ reducedMotion: "reduce" });
+  193 |     await page.goto("/");
+  194 |     await page.getByRole("button", { name: /^sign up$/i }).click();
+  195 |     await page.getByText("Create your account").waitFor();
+  196 |     await finishAnimations(page);
+  197 |     await page.keyboard.press("Escape");
+  198 |     await expect(page.getByText("Create your account")).not.toBeVisible();
+  199 |   });
+  200 | 
+  201 |   test("auth modal receives focus on open", async ({ page }) => {
+  202 |     await page.emulateMedia({ reducedMotion: "reduce" });
+  203 |     await page.goto("/");
+  204 |     await page.getByRole("button", { name: /^sign in$/i }).click();
+  205 |     await page.getByText("Welcome back").waitFor();
+  206 |     await finishAnimations(page);
+  207 |     const focused = await page.evaluate(() => document.activeElement?.closest(".auth-card") !== null);
+  208 |     expect(focused).toBe(true);
+  209 |   });
+  210 | });
+  211 | 
+```
