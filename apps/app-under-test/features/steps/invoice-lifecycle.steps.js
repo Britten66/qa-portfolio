@@ -40,7 +40,9 @@ Then("the invoice form is closed", async ({ page }) => {
 });
 
 Then("the form keeps the values I typed", async ({ page }) => {
-  // values stay in the inputs after typing, basic sanity check
-  const modal = page.locator(".modal");
-  await expect(modal).toContainText("Acme Cleaning Co");
+  // input values are not in textContent, have to read value attribute
+  const clientField = page.locator(".modal").locator(
+    "input[placeholder*='client' i], input[placeholder*='billed' i], input[placeholder*='customer' i]"
+  ).first();
+  await expect(clientField).toHaveValue("Acme Cleaning Co");
 });

@@ -150,7 +150,6 @@ test.describe("Accessibility: Layout structure", () => {
   test("page title is set and non-empty", async ({ page }) => {
     const title = await page.title();
     expect(title.trim().length).toBeGreaterThan(0);
-    expect(title).toContain("InvoicePrepper");
   });
 });
 

@@ -4,10 +4,10 @@
   "type": "module",
   "scripts": {
     "test": "playwright test",
-    "test:public": "playwright test --project=invoiceprepper-smoke --project=invoiceprepper-public",
-    "test:dashboard": "playwright test --project=invoiceprepper-dashboard",
+    "test:public": "playwright test --project=smoke --project=public",
+    "test:dashboard": "playwright test --project=dashboard",
     "bdd:gen": "bddgen",
-    "test:bdd": "bddgen && playwright test --project=invoiceprepper-bdd",
+    "test:bdd": "bddgen && playwright test --project=bdd",
     "anonymize": "node scripts/anonymize-allure-portfolio.cjs",
     "report": "allure generate allure-results --clean -o allure-report && allure open allure-report",
     "report:portfolio": "node scripts/anonymize-allure-portfolio.cjs && allure generate allure-results --clean -o allure-report"

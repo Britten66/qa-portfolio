@@ -1,6 +1,6 @@
 # QA Portfolio
 
-Black-box end-to-end suite. Runs nightly against live production. No mocks, no local servers, no source-code access.
+Black-box end-to-end suite for a production SaaS. Identifiers replaced under NDA. Runs nightly against the live target. No mocks, no local servers, no source code access.
 
 ![CI](https://github.com/Britten66/qa-portfolio/actions/workflows/e2e.yml/badge.svg)
 
@@ -13,20 +13,20 @@ Tests are grouped into 9 epics in the published Allure report:
 | Epic | Coverage |
 |------|----------|
 | EP-01 Authentication & Session | Sign in, sign up, password reset, modal keyboard behaviour, session reuse |
-| EP-02 Marketing Funnel & Acquisition | Landing CTAs, navigation, mock preview, footer integrity |
-| EP-03 SEO Surfaces & Discoverability | Trade-targeted landing pages, heading hierarchy, canonical links |
-| EP-04 Dashboard & Navigation | Sidebar, status filters, empty state, theme persistence |
-| EP-05 Record Lifecycle | New invoice form open / fill / cancel, status filters, soft-delete UI |
-| EP-06 Subscription Billing & Payments | Plan modal, upgrade flow, payment redirect, plan-state display |
-| EP-07 Account Settings & Profile | Profile persistence, password update, avatar / logo flows |
+| EP-02 Marketing Funnel & Acquisition | Landing CTAs, navigation, footer integrity |
+| EP-03 SEO Surfaces | Heading hierarchy, canonical links, page metadata |
+| EP-04 Dashboard & Navigation | Sidebar, status filters, empty state |
+| EP-05 Record Lifecycle | New record form open / fill / cancel, status filters, soft-delete UI |
+| EP-06 Subscription Billing | Plan modal, payment redirect, plan-state display |
+| EP-07 Account Settings & Profile | Profile persistence, password update |
 | EP-08 Accessibility Compliance | WCAG 2.1 AA via axe-core on every public and authed route |
-| EP-09 API Health & Contract Smoke | Edge function uptime, response shape, auth boundary |
+| EP-09 API Health & Contract Smoke | Edge function uptime, CORS preflight, auth boundary |
 
 ## Stack
 
 Playwright 1.52, `@axe-core/playwright`, `allure-playwright`, `playwright-bdd` for the Gherkin scenarios. Node 24. CI on GitHub Actions (nightly cron, `workflow_dispatch`, push to main). Allure HTML deployed to GitHub Pages on the `gh-pages` branch.
 
-BDD is used only on the invoice lifecycle feature, where the readability is worth the indirection. Everything else stays as plain Playwright specs.
+BDD is used only on the record lifecycle feature, where stakeholder readability is worth the indirection. Everything else stays as plain Playwright specs.
 
 ## Architecture decisions
 
@@ -34,9 +34,21 @@ BDD is used only on the invoice lifecycle feature, where the readability is wort
 
 **Session reuse.** A single login runs in `global-setup.js`, persists storage state to `apps/<app>/.auth/user.json`, and replays across every authenticated suite. Avoids rate limits and saves ~3s per spec.
 
-**Project partitioning.** Public, authenticated, and API-smoke suites are separate Playwright projects. Public regressions are visible independently of auth failures, which matters when third-party auth services flake.
+**Project partitioning.** Public, authenticated, API-smoke, and BDD suites are separate Playwright projects. Public regressions are visible independently of auth failures, which matters when third-party auth services flake.
 
-**Anonymized public report.** A post-processing step (`scripts/anonymize-allure-portfolio.cjs`) strips product identifiers, hostnames, emails, and source paths from `allure-results/*.json` before the Allure CLI generates the public report. Epic / feature / story labels are re-derived from spec routing.
+**Anonymized public report.** A post-processing step (`scripts/anonymize-allure-portfolio.cjs`) strips identifiers from `allure-results/*.json` before the Allure CLI generates the public report. The script reads sensitive terms from `ANONYMIZE_TERMS` at runtime so the source never lists what it is hiding.
+
+## Environment
+
+The repo never names the product. Set these locally and as CI secrets:
+
+```
+TARGET_URL          base url for the app under test
+FUNCTIONS_BASE      base url for the backend functions, used by API smoke
+TEST_EMAIL          test account email, dashboard suite only
+TEST_PASSWORD       test account password, dashboard suite only
+ANONYMIZE_TERMS     comma separated list of strings to scrub from the public report
+```
 
 ## Run locally
 
@@ -54,7 +66,7 @@ npm run report:portfolio     # anonymize, generate HTML report
 ## Repo layout
 
 ```
-apps/<app>/
+apps/app-under-test/
   api/                 contract smoke specs
   e2e/                 browser flow specs
   e2e/pages/           page objects (AuthModal, Sidebar, InvoiceList)

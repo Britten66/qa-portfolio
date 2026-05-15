@@ -16,7 +16,8 @@ export default async function globalSetup() {
   const browser = await chromium.launch();
   const page    = await browser.newPage();
 
-  await page.goto("https://invoiceprepper.com");
+  // target url comes from env, falls back to placeholder
+  await page.goto(process.env.TARGET_URL || "https://app.example.com");
 
   // Open sign in modal
   await page.getByRole("button", { name: /^sign in$/i }).click();
@@ -27,7 +28,7 @@ export default async function globalSetup() {
   await page.fill("#auth-password", password);
   await page.getByRole("button", { name: /^sign in$/i }).last().click();
 
-  // Wait for network to settle after Supabase auth
+  // wait for network to settle after auth
   await page.waitForLoadState("networkidle", { timeout: 30000 });
 
   // Dismiss modals if present

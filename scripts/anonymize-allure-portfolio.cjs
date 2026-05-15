@@ -43,15 +43,25 @@ const SEVERITY = {
   MISC: "minor",
 };
 
+// terms come from env so the source never lists what we are hiding
+// set ANONYMIZE_TERMS as a comma separated list in CI secrets and locally
+// example: ANONYMIZE_TERMS="myproduct,myproduct.com,owner@email.com"
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+const ENV_TERMS = (process.env.ANONYMIZE_TERMS || "")
+  .split(",")
+  .map(t => t.trim())
+  .filter(Boolean);
+
 const REDACTIONS = [
-  [/InvoicePrepper/g, "the application"],
-  [/invoiceprepper\.com/gi, "production-app.example.com"],
-  [/invoiceprepper/gi, "app-under-test"],
-  [/MacBookPro[A-Za-z0-9.-]*/g, "ci-runner-linux"],
-  [/britten63@hotmail\.com/gi, "tester@example.com"],
-  [/firstsipsolutions@gmail\.com/gi, "admin@example.com"],
-  [/Britten66/g, "qa-engineer"],
-  [/chrissmacpro/gi, "ci-user"],
+  // generic patterns first
+  [/[\w.+-]+@[\w.-]+\.\w+/g, "redacted@example.com"],
+  [/\/Users\/[^/\s"]+/g, "/Users/redacted"],
+  [/\/home\/[^/\s"]+/g, "/home/redacted"],
+  // env-driven terms last so they win over generic patterns
+  ...ENV_TERMS.map(t => [new RegExp(escapeRegex(t), "gi"), "[redacted]"]),
 ];
 
 function redact(s) {
