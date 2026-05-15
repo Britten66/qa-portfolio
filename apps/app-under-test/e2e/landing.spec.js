@@ -14,9 +14,10 @@ test.describe("Landing page", () => {
   });
 
   test("a hero CTA button is visible", async ({ page }) => {
-    // there are multiple CTAs on the page, hero + pricing, just need one visible
-    const cta = page.locator(".hero button, .hero a").first();
-    await expect(cta).toBeVisible();
+    // sign up / get started CTA — the main above-the-fold conversion action
+    await expect(
+      page.getByRole("button", { name: /sign up|get started|start free|try free/i }).first()
+    ).toBeVisible();
   });
 
   test("Sign In nav button is visible", async ({ page }) => {
