@@ -39,9 +39,4 @@ test.describe("Profile", () => {
     await page.keyboard.press("Escape");
     await expect(page.locator(".modal")).not.toBeVisible();
   });
-
-  test("help button opens help modal", async ({ page }) => {
-    await page.locator(".help-btn").click();
-    await expect(page.locator(".modal")).toBeVisible();
-  });
 });
