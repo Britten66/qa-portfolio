@@ -51,6 +51,11 @@ jobs:
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
 
+      - name: FirstSip Selenium tests
+        run: npm run test:firstsip
+        env:
+          FIRSTSIP_URL: ${{ secrets.FIRSTSIP_URL }}
+
       - name: Upload login failure screenshot
         if: failure()
         uses: actions/upload-artifact@v4

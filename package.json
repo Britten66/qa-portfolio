@@ -10,13 +10,16 @@
     "test:bdd": "bddgen && playwright test --project=bdd",
     "anonymize": "node scripts/anonymize-allure-portfolio.cjs",
     "report": "allure generate allure-results --clean -o allure-report && allure open allure-report",
-    "report:portfolio": "node scripts/anonymize-allure-portfolio.cjs && allure generate allure-results --clean -o allure-report"
+    "report:portfolio": "node scripts/anonymize-allure-portfolio.cjs && allure generate allure-results --clean -o allure-report",
+    "test:firstsip": "mocha apps/firstsip/selenium/tests/**/*.cjs --timeout 30000"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",
     "@playwright/test": "^1.52.0",
     "allure-commandline": "^2.40.0",
     "allure-playwright": "^3.0.0",
-    "playwright-bdd": "^8.5.1"
+    "playwright-bdd": "^8.5.1",
+    "selenium-webdriver": "^4.27.0",
+    "mocha": "^10.8.0"
   }
 }
