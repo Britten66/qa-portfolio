@@ -2,7 +2,8 @@ const { By, until } = require("selenium-webdriver");
 const assert = require("assert");
 const { buildDriver } = require("../helpers/driver.cjs");
 
-const BASE = process.env.BRETON_SMARTEK_URL || "https://bretonsmartek.com";
+const BASE = process.env.BRETON_SMARTEK_URL || "https://bretonsmartek.com/";
+
 
 describe("Breton Smartek — Landing page", function () {
   this.timeout(30000);
