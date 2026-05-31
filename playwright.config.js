@@ -1,12 +1,12 @@
 import { defineConfig, devices } from "@playwright/test";
 import { defineBddConfig } from "playwright-bdd";
-import { AUTH_FILE } from "./apps/breton-smartek/e2e/global-setup.js";
+import { AUTH_FILE } from "./apps/app-under-test/e2e/global-setup.js";
 
 // bdd generates playwright test files from .feature files into this dir
 // run `npm run bdd:gen` before `npm test` or use `npm run test:bdd`
 const bddTestDir = defineBddConfig({
-  features: "apps/breton-smartek/features/*.feature",
-  steps: "apps/breton-smartek/features/steps/*.js",
+  features: "apps/app-under-test/features/*.feature",
+  steps: "apps/app-under-test/features/steps/*.js",
 });
 
 // target url comes from env so the repo never names the product
@@ -21,7 +21,7 @@ export default defineConfig({
   workers: process.env.CI ? 4 : 2,
   timeout: 60000,
 
-  globalSetup: "./apps/breton-smartek/e2e/global-setup.js",
+  globalSetup: "./apps/app-under-test/e2e/global-setup.js",
 
   reporter: [
     ["html", { open: "never" }],
@@ -37,24 +37,24 @@ export default defineConfig({
   projects: [
     {
       name: "smoke",
-      testMatch: ["**/breton-smartek/api/smoke.spec.js"],
+      testMatch: ["**/app-under-test/api/smoke.spec.js"],
     },
     {
       name: "public",
       testMatch: [
-        "**/breton-smartek/e2e/accessibility.spec.js",
-        "**/breton-smartek/e2e/landing.spec.js",
-        "**/breton-smartek/e2e/auth.spec.js",
+        "**/app-under-test/e2e/accessibility.spec.js",
+        "**/app-under-test/e2e/landing.spec.js",
+        "**/app-under-test/e2e/auth.spec.js",
       ],
       use: { ...devices["Desktop Chrome"] },
     },
     {
       name: "dashboard",
       testMatch: [
-        "**/breton-smartek/e2e/dashboard.spec.js",
-        "**/breton-smartek/e2e/invoices.spec.js",
-        "**/breton-smartek/e2e/billing.spec.js",
-        "**/breton-smartek/e2e/profile.spec.js",
+        "**/app-under-test/e2e/dashboard.spec.js",
+        "**/app-under-test/e2e/invoices.spec.js",
+        "**/app-under-test/e2e/billing.spec.js",
+        "**/app-under-test/e2e/profile.spec.js",
       ],
       use: {
         ...devices["Desktop Chrome"],

@@ -11,7 +11,7 @@
     "anonymize": "node scripts/anonymize-allure-portfolio.cjs",
     "report": "allure generate allure-results --clean -o allure-report && allure open allure-report",
     "report:portfolio": "node scripts/anonymize-allure-portfolio.cjs && allure generate allure-results --clean -o allure-report",
-    "test:firstsip": "mocha apps/firstsip/selenium/tests/**/*.cjs --timeout 30000"
+    "test:breton-smartek": "mocha apps/breton-smartek/selenium/tests/**/*.cjs --timeout 30000"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",

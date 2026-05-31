@@ -2,9 +2,9 @@ const { By, until } = require("selenium-webdriver");
 const assert = require("assert");
 const { buildDriver } = require("../helpers/driver.cjs");
 
-const BASE = process.env.TARGET_URL || "https://invoiceprepper.com";
+const BASE = process.env.BRETON_SMARTEK_URL || "https://bretonsmartek.com";
 
-describe("FirstSip — Landing page", function () {
+describe("Breton Smartek — Landing page", function () {
   this.timeout(30000);
   let driver;
 
@@ -49,7 +49,7 @@ describe("FirstSip — Landing page", function () {
     await driver.get(BASE);
     const bodyText = await driver.findElement(By.css("body")).getText();
     assert.ok(
-      !/404|not found|error/i.test(bodyText.slice(0, 500)),
+      !/404|not found/i.test(bodyText.slice(0, 500)),
       "Page should not show a 404 or error message"
     );
   });

@@ -51,10 +51,10 @@ jobs:
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
 
-      - name: FirstSip Selenium tests
-        run: npm run test:firstsip
+      - name: Breton Smartek Selenium tests
+        run: npm run test:breton-smartek
         env:
-          TARGET_URL: ${{ secrets.TARGET_URL }}
+          BRETON_SMARTEK_URL: ${{ secrets.BRETON_SMARTEK_URL }}
 
       - name: Upload login failure screenshot
         if: failure()
