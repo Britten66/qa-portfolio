@@ -2,7 +2,7 @@ const { By, until } = require("selenium-webdriver");
 const assert = require("assert");
 const { buildDriver } = require("../helpers/driver.cjs");
 
-const BASE = process.env.FIRSTSIP_URL || "https://invoiceprepper.com";
+const BASE = process.env.TARGET_URL || "https://invoiceprepper.com";
 
 describe("FirstSip — Landing page", function () {
   this.timeout(30000);

@@ -54,7 +54,7 @@ jobs:
       - name: FirstSip Selenium tests
         run: npm run test:firstsip
         env:
-          FIRSTSIP_URL: ${{ secrets.FIRSTSIP_URL }}
+          TARGET_URL: ${{ secrets.TARGET_URL }}
 
       - name: Upload login failure screenshot
         if: failure()
