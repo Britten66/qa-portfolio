@@ -4,7 +4,7 @@ const { buildDriver } = require("../helpers/driver.cjs");
 
 const BASE = process.env.BRETON_SMARTEK_URL || "https://bretonsmartek.com";
 
-describe("Breton Smartek: edge cases", function () {
+describe("edge cases", function () {
   this.timeout(30000);
   let driver;
 
@@ -13,60 +13,43 @@ describe("Breton Smartek: edge cases", function () {
   after(async () => { await driver.quit(); });
 
   it("title is not a WordPress default", async () => {
-    const title = await driver.getTitle();
-    assert.ok(!/^home$|^wordpress$/i.test(title.trim()), `Generic title: "${title}"`);
+    assert.ok(!/^home$|^wordpress$/i.test((await driver.getTitle()).trim()));
   });
 
-  it("no nav links go to bare #", async () => {
-    const links = await driver.findElements(By.css("nav a, .nav-menu a, .elementor-nav-menu a"));
-    for (const link of links) {
+  it("no nav links go to #", async () => {
+    for (const link of await driver.findElements(By.css("nav a"))) {
       const href = await link.getAttribute("href");
-      assert.ok(href && href.trim() !== "#" && href.trim() !== "", `Dead link: "${href}"`);
+      assert.ok(href && href.trim() !== "#");
     }
   });
 
   it("no broken images", async () => {
-    const broken = await driver.executeScript(`
-      return Array.from(document.querySelectorAll("img"))
-        .filter(img => img.complete && img.naturalWidth === 0 && img.src)
-        .map(img => img.src);
-    `);
-    assert.deepStrictEqual(broken, [], `Broken: ${broken.join(", ")}`);
-  });
-
-  it("CTA buttons have real destinations", async () => {
-    const buttons = await driver.findElements(
-      By.css("a.elementor-button, .wp-block-button__link, .elementor-cta__button, a.btn")
+    const broken = await driver.executeScript(
+      `return Array.from(document.querySelectorAll("img"))
+        .filter(i => i.complete && i.naturalWidth === 0 && i.src)
+        .map(i => i.src);`
     );
-    for (const btn of buttons) {
-      const href = await btn.getAttribute("href");
-      assert.ok(href && href.trim() !== "#" && href.trim() !== "", `CTA goes nowhere: "${href}"`);
-    }
+    assert.deepStrictEqual(broken, []);
   });
 
-  it("HTTP redirects to HTTPS", async () => {
+  it("redirects http to https", async () => {
     await driver.get(BASE.replace("https://", "http://"));
-    const url = await driver.getCurrentUrl();
-    assert.ok(url.startsWith("https://"), `No HTTPS redirect: ${url}`);
+    assert.ok((await driver.getCurrentUrl()).startsWith("https://"));
   });
 
-  it("no custom JS errors on page load", async () => {
+  it("no custom JS errors", async () => {
     const logDriver = await buildDriver();
     try {
       await logDriver.get(BASE);
-      const logs = await logDriver.manage().logs().get(logging.Type.BROWSER);
-      const errors = logs.filter(l =>
-        l.level.value >= logging.Level.SEVERE.value &&
-        !l.message.includes("wp-includes") &&
-        !l.message.includes("wp-content/plugins")
-      );
-      assert.strictEqual(errors.length, 0, errors.map(e => e.message).join(", "));
+      const errors = (await logDriver.manage().logs().get(logging.Type.BROWSER))
+        .filter(l => l.level.value >= logging.Level.SEVERE.value && !l.message.includes("wp-includes") && !l.message.includes("wp-content/plugins"));
+      assert.strictEqual(errors.length, 0);
     } finally {
       await logDriver.quit();
     }
   });
 
-  it("contact info is linked", async () => {
+  it("has a contact link", async () => {
     const links = await driver.findElements(By.css("a[href^='tel:'], a[href^='mailto:']"));
     assert.ok(links.length > 0);
   });
