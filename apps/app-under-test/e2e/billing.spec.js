@@ -1,8 +1,3 @@
-/*
-  E2E: Billing: open modal, plan display, close
-  Suite: Billing
-*/
-
 import { test, expect } from "@playwright/test";
 
 test.describe("Billing", () => {

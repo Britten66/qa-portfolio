@@ -1,8 +1,3 @@
-/*
-  E2E: Invoices: create, view, status
-  Suite: Invoices
-*/
-
 import { test, expect } from "@playwright/test";
 
 test.describe("Invoices", () => {
@@ -41,7 +36,6 @@ test.describe("Invoices", () => {
 
   test("invoice list shows status filters", async ({ page }) => {
     const filters = page.locator("button, [role='tab']").filter({ hasText: /paid|sent|draft/i });
-    const count = await filters.count();
-    expect(count).toBeGreaterThan(0);
+    expect(await filters.count()).toBeGreaterThan(0);
   });
 });

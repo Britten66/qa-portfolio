@@ -1,6 +1,3 @@
-// landing page smoke
-// top of the funnel, if any of these break signups die
-
 import { test, expect } from "@playwright/test";
 
 test.describe("Landing page", () => {
@@ -8,13 +5,12 @@ test.describe("Landing page", () => {
     await page.goto("/");
   });
 
-  test("page has a non empty title", async ({ page }) => {
+  test("page has a non-empty title", async ({ page }) => {
     const title = await page.title();
     expect(title.trim().length).toBeGreaterThan(0);
   });
 
-  test("a hero CTA button is visible", async ({ page }) => {
-    // sign up / get started CTA — the main above-the-fold conversion action
+  test("hero CTA button is visible", async ({ page }) => {
     await expect(
       page.getByRole("button", { name: /sign up|get started|start free|try free/i }).first()
     ).toBeVisible();

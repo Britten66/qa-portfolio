@@ -2,47 +2,34 @@ const { By, until } = require("selenium-webdriver");
 const assert = require("assert");
 const { buildDriver } = require("../helpers/driver.cjs");
 
-const FIREQ2 = (process.env.BRETON_SMARTEK_URL || "https://bretonsmartek.com") + "/fireq-2/";
+const BASE = process.env.BRETON_SMARTEK_URL || "https://bretonsmartek.com";
+const PAGE = `${BASE}/fireq-2/`;
 
-describe("Breton Smartek — FireQ-2 page", function () {
+describe("Breton Smartek: fireq-2 page", function () {
   this.timeout(30000);
   let driver;
 
   before(async () => { driver = await buildDriver(); });
+  beforeEach(async () => { await driver.get(PAGE); });
   after(async () => { await driver.quit(); });
 
-  it("page loads with a non-empty title", async () => {
-    await driver.get(FIREQ2);
+  it("has a non-empty title", async () => {
     const title = await driver.getTitle();
-    assert.ok(title.trim().length > 0, `Expected a page title, got: "${title}"`);
+    assert.ok(title.trim().length > 0);
   });
 
-  it("page does not show a 404 or error", async () => {
-    await driver.get(FIREQ2);
-    const bodyText = await driver.findElement(By.css("body")).getText();
-    assert.ok(
-      !/404|not found/i.test(bodyText.slice(0, 500)),
-      "Page should not show a 404 or error"
-    );
+  it("no 404 in page body", async () => {
+    const body = await driver.findElement(By.css("body")).getText();
+    assert.ok(!/404|not found/i.test(body.slice(0, 500)));
   });
 
   it("main content area is visible", async () => {
-    await driver.get(FIREQ2);
-    const main = await driver.wait(
-      until.elementLocated(By.css("main, .elementor, #primary, .site-main")),
-      10000
-    );
-    assert.ok(await main.isDisplayed(), "Main content should be visible");
+    const el = await driver.wait(until.elementLocated(By.css("main, .elementor, #primary, .site-main")), 10000);
+    assert.ok(await el.isDisplayed());
   });
 
   it("header is visible", async () => {
-    await driver.get(FIREQ2);
-    const header = await driver.wait(
-      until.elementLocated(By.css("header, .site-header, #masthead")),
-      10000
-    );
-    assert.ok(await header.isDisplayed(), "Header should be visible");
+    const el = await driver.wait(until.elementLocated(By.css("header, .site-header, #masthead")), 10000);
+    assert.ok(await el.isDisplayed());
   });
-
-  // TODO: add form tests here once forms are live tonight
 });
