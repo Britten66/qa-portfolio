@@ -14,6 +14,22 @@ Two real projects, tested against production. No mocks. The suite runs on every 
 
 ---
 
+## Where to look
+
+```
+apps/
+  app-under-test/     Playwright suite for my SaaS
+    api/              API smoke tests
+    e2e/              browser tests + page objects
+    features/         BDD scenarios (Gherkin + steps)
+  breton-smartek/
+    selenium/         Selenium + Mocha suite for the client site
+.github/workflows/    CI pipeline (test, report, deploy to Pages)
+scripts/              Allure report anonymizer
+```
+
+Each app folder has its own README explaining the files: [app-under-test](apps/app-under-test/README.md), [breton-smartek](apps/breton-smartek/README.md).
+
 ## Stack
 
 Playwright, Selenium WebDriver, Mocha, axe-core, Allure, playwright-bdd. Node 24. GitHub Actions on push and weekly. Report auto-deploys to GitHub Pages.
