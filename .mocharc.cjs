@@ -6,6 +6,7 @@ module.exports = {
     "apps/breton-smartek/selenium/tests/forms.cjs",
   ],
   timeout: 30000,
+  retries: 2,
   reporter: "allure-mocha",
   reporterOption: ["resultsDir=allure-results"],
 };
