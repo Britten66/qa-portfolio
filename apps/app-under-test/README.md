@@ -23,4 +23,4 @@ npm run test:dashboard   # authenticated flows
 npm run test:bdd         # Gherkin scenarios
 ```
 
-Requires `TARGET_URL`, `TEST_EMAIL`, `TEST_PASSWORD`, and `FUNCTIONS_BASE` in `.env` (see [.env.example](../../.env.example)).
+Reads `TARGET_URL`, `TEST_EMAIL`, `TEST_PASSWORD`, and `FUNCTIONS_BASE` from the environment, pointed at my own accounts.

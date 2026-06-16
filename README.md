@@ -36,9 +36,10 @@ Playwright, Selenium WebDriver, Mocha, axe-core, Allure, playwright-bdd. Node 24
 
 ## Run locally
 
+Runs against my own accounts and target URLs, set through environment variables, so the suite is wired to my projects rather than meant to be cloned and run as-is.
+
 ```bash
 npm install
-cp .env.example .env   # fill in your values
 
 npm run test:public          # landing, auth, smoke
 npm run test:dashboard       # authenticated flows
