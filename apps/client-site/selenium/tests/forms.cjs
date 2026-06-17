@@ -2,8 +2,8 @@ const { By, until } = require("selenium-webdriver");
 const assert = require("assert");
 const { buildDriver } = require("../helpers/driver.cjs");
 
-const BASE = process.env.BRETON_SMARTEK_URL || "https://bretonsmartek.com";
-const FIREQ2 = `${BASE}/fireq-2/`;
+const BASE = process.env.CLIENT_SITE_URL || "https://example.com";
+const PRODUCT_PAGE = `${BASE}${process.env.CLIENT_PAGE_PATH || "/"}`;
 
 describe("buttons and forms", function () {
   this.timeout(30000);
@@ -23,14 +23,14 @@ describe("buttons and forms", function () {
   });
 
   it.skip("form opens on CTA click", async () => {
-    await driver.get(FIREQ2);
-    await driver.findElement(By.css(".cta-btn")).click();
-    assert.ok(await driver.findElement(By.css("form, .elementor-popup-modal")).isDisplayed());
+    await driver.get(PRODUCT_PAGE);
+    await driver.findElement(By.css("[data-cta], .cta")).click();
+    assert.ok(await driver.findElement(By.css("form, [role='dialog']")).isDisplayed());
   });
 
   it.skip("empty form shows validation error", async () => {
-    await driver.get(FIREQ2);
+    await driver.get(PRODUCT_PAGE);
     await driver.findElement(By.css("form [type='submit']")).click();
-    assert.ok(await driver.findElement(By.css(".elementor-error, .wpcf7-not-valid-tip")).isDisplayed());
+    assert.ok(await driver.findElement(By.css("form [aria-invalid='true'], .field-error")).isDisplayed());
   });
 });

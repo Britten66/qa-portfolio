@@ -10,7 +10,7 @@ Two real projects, tested against production. No mocks. The suite runs on every 
 
 **App under test** is my own SaaS, anonymized. Playwright covers auth, dashboard, invoices, billing, profile, accessibility, and API smoke tests. BDD scenarios run on top for the invoice lifecycle.
 
-**Breton Smartek** is a client WordPress/Elementor site. Selenium covers page loads, navigation, broken images, dead links, HTTPS, JS errors, and contact info. Form tests are pending the next deploy.
+**Client site** is a small business marketing site I maintain, kept anonymous. Selenium covers page loads, navigation, broken images, dead links, HTTPS, JS errors, and contact info. Form interaction tests are stubbed and switched on per deploy.
 
 ---
 
@@ -22,13 +22,13 @@ apps/
     api/              API smoke tests
     e2e/              browser tests + page objects
     features/         BDD scenarios (Gherkin + steps)
-  breton-smartek/
-    selenium/         Selenium + Mocha suite for the client site
+  client-site/
+    selenium/         Selenium + Mocha suite for an anonymized client site
 .github/workflows/    CI pipeline (test, report, deploy to Pages)
 scripts/              Allure report anonymizer
 ```
 
-Each app folder has its own README explaining the files: [app-under-test](apps/app-under-test/README.md), [breton-smartek](apps/breton-smartek/README.md).
+Each app folder has its own README explaining the files: [app-under-test](apps/app-under-test/README.md), [client-site](apps/client-site/README.md).
 
 ## Stack
 
@@ -44,5 +44,5 @@ npm install
 npm run test:public          # landing, auth, smoke
 npm run test:dashboard       # authenticated flows
 npm run test:bdd             # Gherkin scenarios
-npm run test:breton-smartek  # Selenium suite
+npm run test:client-site     # Selenium suite
 ```

@@ -2,7 +2,12 @@ const { By, logging } = require("selenium-webdriver");
 const assert = require("assert");
 const { buildDriver } = require("../helpers/driver.cjs");
 
-const BASE = process.env.BRETON_SMARTEK_URL || "https://bretonsmartek.com";
+const BASE = process.env.CLIENT_SITE_URL || "https://example.com";
+
+// noisy third-party/CMS error sources to ignore, supplied per site so the
+// source stays generic. comma separated, e.g. "vendor/scripts,plugins"
+const IGNORE_ERRORS = (process.env.CLIENT_IGNORE_ERROR_PATTERNS || "")
+  .split(",").map(s => s.trim()).filter(Boolean);
 
 describe("edge cases", function () {
   this.timeout(30000);
@@ -12,8 +17,8 @@ describe("edge cases", function () {
   beforeEach(async () => { await driver.get(BASE); });
   after(async () => { await driver.quit(); });
 
-  it("title is not a WordPress default", async () => {
-    assert.ok(!/^home$|^wordpress$/i.test((await driver.getTitle()).trim()));
+  it("title is not a placeholder default", async () => {
+    assert.ok(!/^(home|untitled|new page)$/i.test((await driver.getTitle()).trim()));
   });
 
   it("no nav links go to #", async () => {
@@ -42,7 +47,7 @@ describe("edge cases", function () {
     try {
       await logDriver.get(BASE);
       const errors = (await logDriver.manage().logs().get(logging.Type.BROWSER))
-        .filter(l => l.level.value >= logging.Level.SEVERE.value && !l.message.includes("wp-includes") && !l.message.includes("wp-content/plugins"));
+        .filter(l => l.level.value >= logging.Level.SEVERE.value && !IGNORE_ERRORS.some(p => l.message.includes(p)));
       assert.strictEqual(errors.length, 0);
     } finally {
       await logDriver.quit();

@@ -2,14 +2,14 @@ const { By } = require("selenium-webdriver");
 const assert = require("assert");
 const { buildDriver } = require("../helpers/driver.cjs");
 
-const PAGE = `${process.env.BRETON_SMARTEK_URL || "https://bretonsmartek.com"}/fireq-2/`;
+const BASE = process.env.CLIENT_SITE_URL || "https://example.com";
 
-describe("fireq-2 page", function () {
+describe("landing page", function () {
   this.timeout(30000);
   let driver;
 
   before(async () => { driver = await buildDriver(); });
-  beforeEach(async () => { await driver.get(PAGE); });
+  beforeEach(async () => { await driver.get(BASE); });
   after(async () => { await driver.quit(); });
 
   it("has a title", async () => {
@@ -20,8 +20,12 @@ describe("fireq-2 page", function () {
     assert.ok(await driver.findElement(By.css("header")).isDisplayed());
   });
 
-  it("main content is visible", async () => {
-    assert.ok(await driver.findElement(By.css("main, .elementor")).isDisplayed());
+  it("nav is visible", async () => {
+    assert.ok(await driver.findElement(By.css("nav")).isDisplayed());
+  });
+
+  it("footer is visible", async () => {
+    assert.ok(await driver.findElement(By.css("footer")).isDisplayed());
   });
 
   it("no 404", async () => {

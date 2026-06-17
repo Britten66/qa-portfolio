@@ -51,10 +51,12 @@ jobs:
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
 
-      - name: Breton Smartek Selenium tests
-        run: npm run test:breton-smartek
+      - name: Client site Selenium tests
+        run: npm run test:client-site
         env:
-          BRETON_SMARTEK_URL: ${{ secrets.BRETON_SMARTEK_URL }}
+          CLIENT_SITE_URL: ${{ secrets.CLIENT_SITE_URL }}
+          CLIENT_PAGE_PATH: ${{ secrets.CLIENT_PAGE_PATH }}
+          CLIENT_IGNORE_ERROR_PATTERNS: ${{ secrets.CLIENT_IGNORE_ERROR_PATTERNS }}
 
       - name: Upload login failure screenshot
         if: failure()

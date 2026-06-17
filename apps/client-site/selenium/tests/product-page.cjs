@@ -2,14 +2,15 @@ const { By } = require("selenium-webdriver");
 const assert = require("assert");
 const { buildDriver } = require("../helpers/driver.cjs");
 
-const BASE = process.env.BRETON_SMARTEK_URL || "https://bretonsmartek.com";
+const BASE = process.env.CLIENT_SITE_URL || "https://example.com";
+const PAGE = `${BASE}${process.env.CLIENT_PAGE_PATH || "/"}`;
 
-describe("landing page", function () {
+describe("secondary page", function () {
   this.timeout(30000);
   let driver;
 
   before(async () => { driver = await buildDriver(); });
-  beforeEach(async () => { await driver.get(BASE); });
+  beforeEach(async () => { await driver.get(PAGE); });
   after(async () => { await driver.quit(); });
 
   it("has a title", async () => {
@@ -20,12 +21,8 @@ describe("landing page", function () {
     assert.ok(await driver.findElement(By.css("header")).isDisplayed());
   });
 
-  it("nav is visible", async () => {
-    assert.ok(await driver.findElement(By.css("nav")).isDisplayed());
-  });
-
-  it("footer is visible", async () => {
-    assert.ok(await driver.findElement(By.css("footer")).isDisplayed());
+  it("main content is visible", async () => {
+    assert.ok(await driver.findElement(By.css("main, [role='main'], section")).isDisplayed());
   });
 
   it("no 404", async () => {
