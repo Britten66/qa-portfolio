@@ -23,7 +23,7 @@ test.describe("Auth modal: Sign In", () => {
   });
 
   test("Sign Up tab switches to signup mode", async ({ page }) => {
-    // two buttons named "Sign Up" exist — scope to the modal card
+    // two buttons named "Sign Up" exist, so scope to the modal card
     await page.locator(".auth-card").getByRole("button", { name: /^sign up$/i }).click();
     await expect(page.getByText("Create your account")).toBeVisible();
   });
@@ -40,7 +40,7 @@ test.describe("Auth modal: Sign Up", () => {
   });
 
   test("Sign In tab switches back to login mode", async ({ page }) => {
-    // two buttons named "Sign In" exist — scope to the modal card
+    // two buttons named "Sign In" exist, so scope to the modal card
     await page.locator(".auth-card").getByRole("button", { name: /^sign in$/i }).click();
     await expect(page.getByText("Welcome back")).toBeVisible();
   });

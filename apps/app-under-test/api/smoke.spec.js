@@ -6,7 +6,7 @@ import { test, expect } from "@playwright/test";
 
 // urls come from env so this repo never names the backend
 // set FUNCTIONS_BASE and TARGET_URL locally and in CI secrets
-const BASE = process.env.FUNCTIONS_BASE || "https://qajcynqmjtlzofoyklyp.supabase.co/functions/v1";
+const BASE = process.env.FUNCTIONS_BASE || "https://your-project.example.com/functions/v1";
 const ORIGIN = process.env.TARGET_URL || "https://app.example.com";
 
 // OPTIONS has to work or the browser blocks every request before it even tries

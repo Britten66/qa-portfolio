@@ -1,7 +1,4 @@
-/*
-  E2E: Profile: open, fields, close
-  Suite: Profile
-*/
+// profile modal: open it, check the fields are there, close it
 
 import { test, expect } from "@playwright/test";
 

@@ -13,7 +13,7 @@ async function attemptLogin(targetUrl, email, password) {
 
   try {
     // domcontentloaded is enough, we wait for the auth modal next anyway
-    // networkidle is unreliable here because Supabase keeps a websocket open
+    // networkidle is unreliable here because the backend keeps a websocket open
     await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
 
     await page.getByRole("button", { name: /^sign in$/i }).click();
