@@ -1,21 +1,21 @@
 # Client site (Selenium)
 
-A small business marketing site I maintain, tested live with Selenium WebDriver and Mocha. The client and its URL are kept anonymous: the target comes from the `CLIENT_SITE_URL` env var, and the public Allure report is anonymized before publishing.
+A marketing site I look after, checked live with Selenium and Mocha. The client and its URL stay anonymous: the target comes from the `CLIENT_SITE_URL` env var, and the report is scrubbed before it goes public.
 
-## Layout
+Here's what each test covers:
 
-| File | What it covers |
+| File | What it checks |
 |---|---|
-| [selenium/helpers/driver.cjs](selenium/helpers/driver.cjs) | Builds the Chrome driver (headless in CI) with an implicit wait |
+| [selenium/helpers/driver.cjs](selenium/helpers/driver.cjs) | Builds the headless Chrome driver with an implicit wait |
 | [selenium/tests/landing.cjs](selenium/tests/landing.cjs) | Homepage loads: title, header, nav, footer, no 404 |
-| [selenium/tests/product-page.cjs](selenium/tests/product-page.cjs) | A secondary content page loads and renders |
-| [selenium/tests/edge-cases.cjs](selenium/tests/edge-cases.cjs) | Things that slip through manual checks: default CMS titles, dead nav links, broken images, http to https redirect, console JS errors |
-| [selenium/tests/forms.cjs](selenium/tests/forms.cjs) | Buttons and contact form. Two form tests are stubbed until a deploy adds stable selectors |
+| [selenium/tests/product-page.cjs](selenium/tests/product-page.cjs) | A second page loads and renders |
+| [selenium/tests/edge-cases.cjs](selenium/tests/edge-cases.cjs) | The stuff that slips past a manual check: placeholder titles, dead nav links, broken images, http to https redirect, console errors |
+| [selenium/tests/forms.cjs](selenium/tests/forms.cjs) | Buttons and the contact form. The two form tests are stubbed until a deploy gives them stable selectors |
 
-## Run
+## Running it
 
 ```bash
 npm run test:client-site
 ```
 
-Set `CLIENT_SITE_URL` (and optionally `CLIENT_PAGE_PATH` for the secondary page) in the environment.
+Set `CLIENT_SITE_URL` in the environment (and `CLIENT_PAGE_PATH` if you want to point the second page somewhere specific).
