@@ -2,47 +2,62 @@
 
 ![CI](https://github.com/Britten66/qa-portfolio/actions/workflows/e2e.yml/badge.svg)
 
-Live test report: **https://britten66.github.io/qa-portfolio**
+**Live test report:** https://britten66.github.io/qa-portfolio
 
----
+This is my working QA automation portfolio. It is not a demo or a tutorial copy. It is two real products that I test continuously against their live production sites, with the results published automatically after every run. The green badge above is the latest run. The link above is the report you can click through.
 
-Two real projects, tested against production. No mocks. The suite runs on every push and catches regressions before anyone notices.
+## What this shows I can do
 
-**App under test** is my own SaaS, anonymized. Playwright covers auth, dashboard, invoices, billing, profile, accessibility, and API smoke tests. BDD scenarios run on top for the invoice lifecycle.
+- Build end to end UI tests with **Playwright** and **Selenium**, the two industry standards.
+- Test real production systems black box, with no mocks, including logged in flows.
+- Write **BDD** scenarios in plain Gherkin so non technical people can read what is tested.
+- Cover **accessibility** (axe-core) and **API** health, not just clicking buttons.
+- Run everything automatically in **CI** (GitHub Actions) and publish a shareable **Allure** report.
+- Keep client and product details private while still showing the work in public.
 
-**Client site** is a small business marketing site I maintain, kept anonymous. Selenium covers page loads, navigation, broken images, dead links, HTTPS, JS errors, and contact info. Form interaction tests are stubbed and switched on per deploy.
+## The two projects
 
----
+**1. My SaaS app** (`apps/app-under-test`)
+A full Playwright suite covering sign in and sessions, the dashboard, the invoice lifecycle, billing, profile settings, accessibility, and API smoke checks. BDD scenarios run on top for the invoice flow. The product is anonymized so nothing identifies it publicly.
 
-## Where to look
+**2. A client site** (`apps/client-site`)
+A live marketing site I maintain, monitored with Selenium and Mocha. It checks that pages load, navigation works, images are not broken, links are not dead, the site stays on HTTPS, and there are no JavaScript errors. The client is kept anonymous. This runs as best effort monitoring, so a hiccup on their site never breaks my portfolio's status.
+
+## How to walk through it
 
 ```
 apps/
   app-under-test/     Playwright suite for my SaaS
     api/              API smoke tests
-    e2e/              browser tests + page objects
-    features/         BDD scenarios (Gherkin + steps)
+    e2e/              browser tests and page objects
+    features/         BDD scenarios (Gherkin and step definitions)
   client-site/
-    selenium/         Selenium + Mocha suite for an anonymized client site
-.github/workflows/    CI pipeline (test, report, deploy to Pages)
-scripts/              Allure report anonymizer
+    selenium/         Selenium and Mocha monitoring suite
+.github/workflows/    the CI pipeline: test, build report, publish
+scripts/              the script that anonymizes the public report
 ```
 
-Each app folder has its own README explaining the files: [app-under-test](apps/app-under-test/README.md), [client-site](apps/client-site/README.md).
+Each project folder has its own README that explains every file:
+[app-under-test](apps/app-under-test/README.md) and [client-site](apps/client-site/README.md).
 
-## Stack
+Good order to look: open the [live report](https://britten66.github.io/qa-portfolio) first to see passing results, then open a project README to see how the tests are organized, then open a test file to see how one is written.
 
-Playwright, Selenium WebDriver, Mocha, axe-core, Allure, playwright-bdd. Node 24. GitHub Actions on push and weekly. Report auto-deploys to GitHub Pages.
+## How it runs
 
-## Run locally
+Every push to `main`, and once a week on a schedule, GitHub Actions installs the tools, runs all the suites against production, generates the Allure report, anonymizes it, and publishes it to GitHub Pages. No manual steps.
 
-Runs against my own accounts and target URLs, set through environment variables, so the suite is wired to my projects rather than meant to be cloned and run as-is.
+## Tools
+
+Playwright, Selenium WebDriver, Mocha, axe-core, Allure, playwright-bdd, Node 24, GitHub Actions.
+
+## Running it yourself
+
+The suite is wired to my own accounts and URLs through environment variables, so it is built to run as my portfolio rather than to be cloned and run as is.
 
 ```bash
 npm install
-
-npm run test:public          # landing, auth, smoke
-npm run test:dashboard       # authenticated flows
+npm run test:public          # public pages, auth, accessibility, API
+npm run test:dashboard       # logged in flows
 npm run test:bdd             # Gherkin scenarios
-npm run test:client-site     # Selenium suite
+npm run test:client-site     # Selenium monitoring suite
 ```
