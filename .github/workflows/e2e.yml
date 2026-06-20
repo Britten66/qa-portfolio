@@ -51,7 +51,11 @@ jobs:
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
 
+      # Live monitoring against a third-party client site. Best-effort, so it
+      # does not gate the portfolio's build status when the site or its
+      # secrets are unavailable.
       - name: Client site Selenium tests
+        continue-on-error: true
         run: npm run test:client-site
         env:
           CLIENT_SITE_URL: ${{ secrets.CLIENT_SITE_URL }}
