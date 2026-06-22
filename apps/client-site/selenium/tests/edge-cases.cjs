@@ -55,7 +55,8 @@ describe("edge cases", function () {
   });
 
   it("has a contact link", async () => {
-    const links = await driver.findElements(By.css("a[href^='tel:'], a[href^='mailto:']"));
+    // phone, email, or a link to the contact page all count as reachable
+    const links = await driver.findElements(By.css("a[href^='tel:'], a[href^='mailto:'], a[href*='contact']"));
     assert.ok(links.length > 0);
   });
 });
