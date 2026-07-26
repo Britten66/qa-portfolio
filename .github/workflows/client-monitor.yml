@@ -1,0 +1,36 @@
+name: Client site monitor
+
+# Runs the Selenium checks against the live client site on a timer.
+# If anything breaks, this run fails and GitHub emails the repo owner.
+# It is separate from the portfolio E2E workflow on purpose, so an issue
+# on the client's site never turns the portfolio badge red.
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # every 6 hours
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    name: Client site checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run client site checks
+        run: npm run test:client-site
+        env:
+          CLIENT_SITE_URL: ${{ secrets.CLIENT_SITE_URL }}
+          CLIENT_PAGE_PATH: ${{ secrets.CLIENT_PAGE_PATH }}
+          CLIENT_IGNORE_ERROR_PATTERNS: ${{ secrets.CLIENT_IGNORE_ERROR_PATTERNS }}
