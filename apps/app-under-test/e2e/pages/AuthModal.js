@@ -18,10 +18,9 @@ export class AuthModal {
     await this.page.getByRole("button", { name: /^sign up$/i }).click();
   }
 
-  async fillSignUp(email, password, confirm) {
+  async fillSignUp(email, password) {
     await this.page.getByPlaceholder("you@example.com").fill(email);
-    await this.page.locator('input[type="password"]').first().fill(password);
-    await this.page.locator('input[type="password"]').last().fill(confirm);
+    await this.page.locator('input[type="password"]').fill(password);
     await this.page.getByRole("button", { name: /create account/i }).click();
   }
 
