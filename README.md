@@ -1,6 +1,5 @@
 # QA Portfolio
 
-![CI](https://github.com/Britten66/qa-portfolio/actions/workflows/e2e.yml/badge.svg)
 
 Live report: https://britten66.github.io/qa-portfolio
 
