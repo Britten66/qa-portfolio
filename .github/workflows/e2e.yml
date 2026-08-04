@@ -85,3 +85,13 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: allure-report
           publish_branch: gh-pages
+
+      - name: Notify phone on failure (ntfy)
+        if: failure()
+        run: |
+          curl -s \
+            -H "Title: QA Portfolio E2E failed" \
+            -H "Priority: high" \
+            -H "Tags: rotating_light" \
+            -d "Run failed on ${{ github.repository }}@${{ github.ref_name }}. Details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            "https://ntfy.sh/${{ secrets.NTFY_TOPIC }}"
