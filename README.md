@@ -29,7 +29,7 @@ apps/
 scripts/              the script that strips private details from the report
 ```
 
-Each app folder has its own README explaining the files. If you're new to the repo, open the [live report](https://britten66.github.io/qa-portfolio) first, then a project README, then a test file.
+Each app folder has its own README explaining the files. If you're new to the repo, open the [live report](https://britten66.github.io/qa-portfolio) first, then a project README, then a test file. For a breakdown of what's covered and what isn't, see [docs/coverage.md](docs/coverage.md).
 
 ### How it runs
 
