@@ -38,7 +38,11 @@ jobs:
       - name: Notify phone on failure (ntfy)
         if: failure()
         run: |
-          curl -s \
+          if [ -z "${{ secrets.NTFY_TOPIC }}" ]; then
+            echo "::error::NTFY_TOPIC secret is not set, cannot send push notification"
+            exit 1
+          fi
+          curl -sf \
             -H "Title: Client site monitor failed" \
             -H "Priority: high" \
             -H "Tags: rotating_light" \
