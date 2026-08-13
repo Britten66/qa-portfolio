@@ -3,17 +3,11 @@
 
 Live report: https://britten66.github.io/qa-portfolio
 
-I'm a QA engineer. This is the actual test suite I run, not a sample project. It tests two real apps against their live sites and publishes the results after every run, so the report above is always current.
-
-There are two apps in here.
+I'm a QA engineer. This is the actual test suite I run, not a sample project. It tests a real app against its live site and publishes the results after every run, so the report above is always current.
 
 ### My SaaS app
 
 Lives in [apps/app-under-test](apps/app-under-test). I test it with Playwright: sign in and sessions, the dashboard, the invoice lifecycle, billing, profile, and accessibility, plus a few API smoke checks. There are also some BDD scenarios written in Gherkin for the invoice flow, so the test reads like plain English. The product is anonymized, so nothing public points back to it.
-
-### A client site
-
-Lives in [apps/client-site](apps/client-site). It's a marketing site I look after, checked with Selenium and Mocha. The tests make sure pages load, nav works, images aren't broken, links aren't dead, the site stays on HTTPS, and the console is clean. The client stays anonymous. These run as best effort, so if their site has a bad day it doesn't drag my badge down with it.
 
 ### Getting around
 
@@ -23,8 +17,6 @@ apps/
     api/              API smoke tests
     e2e/              browser tests and page objects
     features/         BDD scenarios
-  client-site/
-    selenium/         Selenium and Mocha checks
 .github/workflows/    the CI that runs everything and publishes the report
 scripts/              the script that strips private details from the report
 ```
@@ -44,7 +36,6 @@ npm install
 npm run test:public          # public pages, auth, accessibility, API
 npm run test:dashboard       # logged in flows
 npm run test:bdd             # Gherkin scenarios
-npm run test:client-site     # Selenium checks
 ```
 
-Built with Playwright, Selenium, Mocha, axe-core, Allure, and GitHub Actions on Node 24.
+Built with Playwright, axe-core, Allure, and GitHub Actions on Node 24.
